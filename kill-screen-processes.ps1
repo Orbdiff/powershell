@@ -8,7 +8,7 @@ $forbiddenProcesses = @(
     "chromium","ungoogled-chromium","epicbrowser","slimjet","comodo",
 
     "obs","obs32","obs64","streamlabs","camtasia","bandicam","xsplit",
-    "fraps","action","dxtory","sharex","screenrec","flashback",
+    "fraps","action","dxtory","sharex","screenrec","flashback", "bdcam",
 
     "gamebar","xboxgamebar","gamebarpresencewriter","broadcastdvr",
     "discord","discordcanary","discordptb","steam","steamwebhelper",
