@@ -18,6 +18,12 @@ Write-Host ""
 Start-Sleep -s 3
 cls
 
+if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    Write-Host "This script requires administrator privileges to run properly. Please run PowerShell as an administrator." -ForegroundColor Red
+    Start-Sleep -s 5
+    exit
+}
+
 Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
@@ -125,6 +131,18 @@ $reader.Close()
 Write-Host "Total lines processed: $lineCount" -ForegroundColor Cyan
 $uniquePaths = $foundPaths | Select-Object -Unique
 Write-Host "Total unique paths found: $($uniquePaths.Count)" -ForegroundColor Green
+
+$username = $env:USERNAME
+$uniquePaths = $uniquePaths | ForEach-Object {
+    $path = $_
+    $usersIndex = $path.IndexOf("Users\", [System.StringComparison]::OrdinalIgnoreCase)
+    if ($usersIndex -ge 0) {
+        $afterUsers = $path.Substring($usersIndex + 6)
+        $afterUsers = $afterUsers.Replace("#un#", $username)
+        $path = $path.Substring(0, $usersIndex + 6) + $afterUsers
+    }
+    $path
+}
 
 $results = @()
 for ($j = 0; $j -lt $uniquePaths.Count; $j++) {
